@@ -27,8 +27,8 @@ public class DatabaseUserDetails implements UserDetails {
         for (Ruolo ruolo:operatore.getRuoli()){
         SimpleGrantedAuthority sGA = new SimpleGrantedAuthority(ruolo.getName());
         this.authorities.add(sGA);
+        }
     }
-}
 
     public Collection<? extends GrantedAuthority> getAuthorities(){
         return authorities;

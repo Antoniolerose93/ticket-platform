@@ -14,5 +14,10 @@ public List<Ticket> findByOperatoreMailAndTitoloContainingIgnoreCase(String mail
 
 public List<Ticket> findByTitoloContainingIgnoreCase(String keyword);
    
+List<Ticket> findByOperatoreId(Integer id);
+
+List<Ticket> findByCategoriaNomeIgnoreCase(String nome);
+
+List<Ticket> findByStatoIgnoreCase(String stato);
 
 }

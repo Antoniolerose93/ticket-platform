@@ -25,7 +25,10 @@
                     <dd th:text="*{stato}"></dd>
                 </dl>
             </div>
-            <div class="col-4"> 
+            <div class="col-4">
+                <div class="alert alert-danger" th:if="${errorMessage}">
+                    <span th:text="${errorMessage}"></span>
+                </div> 
                 <form th:action="@{'/operatori/show/' + ${operatore.id} + '/stato'}" method="post">
                 <label for="stato">Modifica stato:</label>
                 <select id="stato" name="stato">

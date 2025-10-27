@@ -2,6 +2,8 @@ package org.ticket_platform.ticket_platform.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -38,7 +40,8 @@ public class Operatore {
     @NotNull
     private String password;
        
-   @OneToMany (mappedBy="operatore")
+    @OneToMany (mappedBy="operatore")
+    @JsonBackReference
     private List<Ticket> tickets;
 
     @ManyToMany(fetch = FetchType.EAGER)

@@ -1,0 +1,83 @@
+{
+	"info": {
+		"_postman_id": "d90c2320-214b-4e2d-ac7d-3eaf799a574b",
+		"name": "ticket_platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49205896",
+		"_collection_link": "https://antoniolerose93-4693088.postman.co/workspace/Antonio-Le-Rose's-Workspace~1444dea3-c3b4-40bc-8ed5-806810a3b8cd/collection/49205896-d90c2320-214b-4e2d-ac7d-3eaf799a574b?action=share&source=collection_link&creator=49205896"
+	},
+	"item": [
+		{
+			"name": "visualizza tickets",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/tickets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"tickets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "visualizza tickets per categoria",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/api/tickets/categoria?categoriaNome=hardware",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"tickets",
+						"categoria"
+					],
+					"query": [
+						{
+							"key": "categoriaNome",
+							"value": "hardware"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Visualizza tickets per stato",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/api/tickets/stato?stato=in%20corso",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"tickets",
+						"stato"
+					],
+					"query": [
+						{
+							"key": "stato",
+							"value": "in%20corso"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -13,7 +13,10 @@
 
         <h1>Operatori</h1>
         <hr />
-
+        <form method="get" action="/operatori">
+            <input type="text" name="keyword" placeholder="Cerca per codice">
+            <button type="submit" class="btn btn-primary mt-2">Cerca</button>
+        </form>
         <!-- Lista operatori -->
         <div th:each="oper : ${operatori}" class="mb-5">
             <div class="card mb-3">
