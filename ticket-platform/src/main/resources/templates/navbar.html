@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Navbar</title>
+</head>
+<body>
+  <nav th:fragment="navbar(current)" class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      
+      <a class="navbar-brand" th:href="@{/tickets/}">Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" th:href="@{/tickets/}"
+          th:classAppend="${current == 'Tickets'} ? active : not-active">Tickets</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" th:href="@{/categorie}"
+          th:classAppend="${current == 'Categorie'} ? active : not-active">Categorie</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" th:href="@{/operatori}"
+          th:classAppend="${current == 'Operatori'} ? active : not-active">Operatori</a>
+        </li>
+
+      </ul>
+    </div>
+    <div>
+      Operatore autenticato : <strong><span sec:authentication ="name"></span></strong>
+      Ruolo: <strong><span sec:authentication="principal.authorities"></span></strong>
+                <a class="btn btn-primary" href = "/logout-success">LOGOUT</a>
+    </div>
+    </div>
+  </nav>
+    <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

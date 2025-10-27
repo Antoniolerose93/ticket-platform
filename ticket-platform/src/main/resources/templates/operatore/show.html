@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title th:unless="${empty}" th:text ="${operatore.codice}">Operatore</title>
+    <title th:if="${empty}">Operatore non trovato</title>
+</head>
+<body>
+    <nav th:replace="~{navbar :: navbar('Operatori')}"></nav>
+    <div class="container" th:object="${operatore}" th:unless="${empty}">
+        <h1 th:text ="|Operatore ${operatore.codice}"></h1>
+        <hr/>
+        <div class ="row">
+            <div class="col-4">
+                <dl>
+                    <dt>Codice</dt>
+                    <dd th:text="*{codice}"></dd>
+                    <dt>Mail</dt>
+                    <dd th:text="*{mail}"></dd>
+                    <dt>Stato</dt>
+                    <dd th:text="*{stato}"></dd>
+                </dl>
+            </div>
+            <div class="col-4"> 
+                <form th:action="@{'/operatori/show/' + ${operatore.id} + '/stato'}" method="post">
+                <label for="stato">Modifica stato:</label>
+                <select id="stato" name="stato">
+                    <option th:value="libero" th:selected="${operatore.stato == 'libero'}">Libero</option>
+                    <option th:value="occupato" th:selected="${operatore.stato == 'occupato'}">Occupato</option>
+                </select>
+    <button type="submit" class="btn btn-primary">Aggiorna</button>
+</form>
+            </div>
+        </div>
+    </div>
+
+
+<script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+</body>

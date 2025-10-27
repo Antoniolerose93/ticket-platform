@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Create</title>
+</head>
+<body>
+    <nav th:replace="~{navbar :: navbar('Ticket')}"></nav> 
+    
+    <div class="container">
+        <div class="content">    
+        
+        <h1 class="text-center py-3">Aggiungi un ticket</h1>
+        <hr/>
+    <form id="ticket-form" th:object="${ticket}" th:action="@{/tickets/create}" method="post">
+        <ul th:if="${#fields.hasErrors('*')}">
+            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Errore di inserimento</li>
+        </ul>
+        <div class="row">
+            <div class ="col-8">
+                <div class ="row gy-2">
+                    <div class="col-12">
+                        <label class="form-label" for="autore">Autore</label>
+                        <input id ="autore" type="text" class="form-control" th:field="*{autore}" th:errorClass ="is-invalid">
+                        <div th:if="${#fields.hasErrors('autore')}" class ="invalid-feedback" >
+                            <ul>
+                                <li th:each="err : ${#fields.errors('autore')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="titolo">Titolo</label>
+                        <input id ="titolo" type="text" class="form-control" th:field="*{titolo}" th:errorClass ="is-invalid">
+                        <div th:if="${#fields.hasErrors('titolo')}" class ="invalid-feedback" >
+                               <ul>
+                                <li th:each="err : ${#fields.errors('titolo')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="dettagli">Descrizione</label>
+                        <input id ="descrizione" type="text" class="form-control" th:field="*{descrizione}" th:errorClass ="is-invalid">
+                        <div th:if="${#fields.hasErrors('descrizione')}" class ="invalid-feedback" >
+                            <ul>
+                                <li th:each="err : ${#fields.errors('descrizione')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Categorie</label>
+                        <div th:each="cat : ${categoria}">
+                        <input type="radio" th:value ="${cat.id}" th:field="*{categoria}" th:errorClass ="is-invalid">
+                            <span th:text="${cat.nome}"></span>
+                        </div> 
+                        <div th:if="${#fields.hasErrors('categoria')}" class ="invalid-feedback" >
+                            <ul>
+                                <li th:each="err : ${#fields.errors('categoria')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Operatori disponibili</label>
+                        <div th:each="ope : ${operatore}">
+                            <input type="radio" th:field="*{operatore}" th:value="${ope.id}" class="form-check-input" id="ope__${ope.id}">
+                            <label th:for="'ope__' + ${ope.id}" th:text="${ope.codice}"></label>
+                        </div>
+                        <div th:if="${#fields.hasErrors('operatore')}" class="invalid-feedback">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('operatore')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                        <div class="col-6">
+                            <button class="btn btn-primary" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+                                </svg>
+                                Salva
+                            </button>
+                                <a th:href="@{/tickets/}" class="btn btn-danger"> Cancella </a>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </form>
+<script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

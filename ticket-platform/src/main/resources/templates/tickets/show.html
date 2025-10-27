@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title th:unless="${empty}" th:text ="${ticket.titolo}"></title>
+    <title th:if="${empty}">Ticket non trovato</title>
+</head>
+<body>
+    <nav th:replace="~{navbar :: navbar('Ticket')}"></nav>
+    <div class="container" th:object="${ticket}" th:unless="${empty}">
+        <h1 th:text ="*{titolo}"></h1>
+        <h2 th:text ="|Categoria di problema: ${ticket.categoria.nome}|"></h2>
+        <hr/>
+        <div class ="row">
+            <div class="col-4">
+                <dl>
+                    <dt>Titolo</dt>
+                    <dd th:text="*{titolo}"></dd>
+                    <dt>Autore</dt>
+                    <dd th:text="*{autore}"></dd>
+                    <dt>Descrizione</dt>
+                    <dd th:text="*{descrizione}"></dd>
+                    <dt>Operatore a cui è assegnato</dt>
+                    <dd th:text="*{operatore.codice}"></dd>
+                    <!-- <dt>Stato del ticket</dt>
+                    <dd th:text="*{stato}"></dd> -->
+                    
+                </dl>
+            </div>
+            <div class="col-4 mt-3">
+                <form th:action="@{/tickets/show/{id}(id=${ticket.id})}" method="post">
+                <div class="mb-2">
+                    <label for="stato" class="form-label">Stato del ticket</label>
+                    <select id="stato" name="stato" class="form-select">
+                        <option th:selected="${ticket.stato == 'Da fare'}" value="Da fare">Da fare</option>
+                        <option th:selected="${ticket.stato == 'In corso'}" value="In corso">In corso</option>
+                        <option th:selected="${ticket.stato == 'Completato'}" value="Completato">Completato</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" th:formaction="@{/tickets/show/{id}(id=${ticket.id})}">
+                    Aggiorna Stato
+                </button>
+                </form>
+            </div>
+             <div class="col-8">
+                <h3>Note</h3>
+                
+                    <a class ="btn btn-outline-primary" th:href="@{/tickets/{id}/note(id=${ticket.id})}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-plus" viewBox="0 0 16 16">
+                        <path
+                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                    </svg>
+                    Aggiungi nota
+                    </a>
+                
+                    <table class ="table table-striped" th:if="${ticket.note.size()>0}"> <!-- verifichiamo se un ticket ha almeno una nota associata-->
+                        <thead>
+                            <tr>
+                                <td><b>Autore della nota</b></td>
+                                <td><b>Testo della nota</b></td>
+                                <td><b>Data creazione nota</b></td>
+                                <td></td> <!-- colonna per la modifica-->
+                                <td></td> <!--  colonna per la cancellazione -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="note : ${ticket.note}">
+                                <td th:text = "${note.autore}"></td>
+                                <td th:text = "${note.testo}"></td>
+                                <td th:text = "${note.dataCreazione}"></td>
+                                <td>
+                                    <a class="btn btn-outline-primary" th:href="@{|/note/edit/${note.id}|}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-pencil" viewBox="0 0 16 16">
+                                        <path
+                                            d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+                                        </svg>
+                                    </a>
+                                </td>
+                                <td>  
+                                    <form th:action="@{/note/delete/{id}(id=${note.id})}" method="post" >
+                                        <input type ="hidden" name ="ticketId" th:value="${ticket.id}"/>
+                                        <button class ="btn btn-danger" type = "submit" id ="submitButton"
+                                        onclick ="return confirm('Sei sicuro?')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <div th:unless="${ticket.note.size() > 0}">
+                        <div class ="alert alert-primary">
+                            Non ci sono note su questo ticket
+                        </div>
+                    </div>
+        </div>
+    </div>
+
+
+<script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+</body>
