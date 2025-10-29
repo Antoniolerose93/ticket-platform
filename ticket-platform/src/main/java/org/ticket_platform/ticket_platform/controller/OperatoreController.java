@@ -47,7 +47,7 @@ public class OperatoreController {
                 operatoriRepository.findByCodiceContainingIgnoreCase(keyword));
     }
     } else {
-    // Utente normale: mostra solo se stesso
+    // L'operatore mostra solo se stesso
     Optional<Operatore> optionalOperatore = operatoriRepository.findByMail(userDetails.getUsername());
     if (optionalOperatore.isPresent()) {
         Operatore operatore = optionalOperatore.get();
@@ -55,7 +55,7 @@ public class OperatoreController {
     }
     }
     return "operatore/index";
-}
+    }
     
         
     @GetMapping("/show/{id}") 

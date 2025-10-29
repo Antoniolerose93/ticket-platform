@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -54,20 +55,26 @@ public class TicketController {
     List<Ticket> tickets;
 
     // Se admin mostra tutti i ticket
-    if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("admin"))) {
-        tickets = (keyword == null || keyword.isBlank())
-                ? ticketRepository.findAll()
-                : ticketRepository.findByTitoloContainingIgnoreCase(keyword);
-    } else { // altrimenti, filtra per ticket assegnati all'operatore
-        tickets = (keyword == null || keyword.isBlank())
-                ? ticketRepository.findByOperatoreMail(userDetails.getUsername())
-                : ticketRepository.findByOperatoreMailAndTitoloContainingIgnoreCase(
-                      userDetails.getUsername(), keyword);
+    if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("admin"))) {
+        // Admin  visualizza tutti i ticket o filtra per titolo
+        if (keyword == null || keyword.isBlank()) {
+            tickets = ticketRepository.findAll();
+        } else {
+            tickets = ticketRepository.findByTitoloContainingIgnoreCase(keyword);
+        }
+    } else {
+        // Operatore visualizza solo i ticket assegnati a lui
+        if (keyword == null || keyword.isBlank()) {
+            tickets = ticketRepository.findByOperatoreMail(userDetails.getUsername());
+        } else {
+            tickets = ticketRepository.findByOperatoreMailAndTitoloContainingIgnoreCase(
+                userDetails.getUsername(), keyword);
+        }
     }
 
     model.addAttribute("list", tickets);
     return "/tickets/index";
-}
+    }
 
     @GetMapping("/show/{id}")
         public String show(@PathVariable("id") Integer id, Model model){
@@ -81,7 +88,7 @@ public class TicketController {
             }
 
             return "/tickets/show";
-        }
+            }
 
     @PostMapping("/show/{id}")
     public String aggiornaStato(@PathVariable ("id") Integer id, @RequestParam("stato") String stato){
@@ -95,7 +102,7 @@ public class TicketController {
             return "redirect:/tickets/";
         }
 
-    }
+        }
     
     @GetMapping("/create")
         public String create (Model model) {
@@ -103,7 +110,7 @@ public class TicketController {
         model.addAttribute("categoria", categorieRepository.findAll());
         model.addAttribute("operatore", operatoriRepository.findByStato("libero")); // <--- aggiungi questo
         return "/tickets/create";
-}
+        }
 
     @PostMapping("/create") @Valid
         public String save(@Valid @ModelAttribute("ticket") Ticket formTicket,
@@ -127,7 +134,7 @@ public class TicketController {
         ticketRepository.save(formTicket);
         redirectAttributes.addFlashAttribute("successMessage", "Ticket inserito con successo");
         return "redirect:/tickets/";
-    }
+        }  
 
 
     @GetMapping("/edit/{id}")
@@ -137,7 +144,7 @@ public class TicketController {
         model.addAttribute("ticket", ticket);
         model.addAttribute("categoria", categorieRepository.findAll());
         return "/tickets/edit";
-}
+        }
 
     @PostMapping("/edit/{id}") 
     public String update(@Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult,Model model) {    
@@ -165,7 +172,7 @@ public class TicketController {
         
         return "redirect:/tickets/";
 
-    }
+        }
 
     @PostMapping("/delete/{id}")
         public String delete (@PathVariable("id") Integer id){
@@ -185,7 +192,7 @@ public class TicketController {
         model.addAttribute("nota", note);
         model.addAttribute("editMode", false); 
         return "/note/edit";
-    }
+        }
 
 
 
